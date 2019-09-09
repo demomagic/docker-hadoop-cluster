@@ -8,8 +8,6 @@ RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak
 RUN sed -i s:/archive.ubuntu.com:/cn.archive.ubuntu.com:g /etc/apt/sources.list
 RUN cat /etc/apt/sources.list
 RUN apt-get clean
-RUN apt-get -y update --fix-missing && apt-get install -y fortunes
-CMD /usr/games/fortune -a | cowsay
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       openjdk-8-jdk \
