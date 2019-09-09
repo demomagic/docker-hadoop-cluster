@@ -92,6 +92,7 @@ services:
       
   spark-worker-1:
     image: demomagic/spark-worker:2.4.3-hadoop2.7
+    container_name: spark-worker-1
     depends_on:
       - spark-master
     environment:
@@ -105,6 +106,7 @@ services:
 #
   hue:
     image: demomagic/hue:4.5.0
+    container_name: hue
     ports:
       - 8088:8088
     environment:
