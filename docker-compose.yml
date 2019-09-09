@@ -1,0 +1,80 @@
+version: "3"
+
+services:
+  namenode:
+    image: demomagic/hadoop-namenode:hadoop-3.1.2
+    container_name: namenode
+    ports:
+      - 9870:9870
+    volumes:
+      - hadoop_namenode:/hadoop/dfs/name
+    environment:
+      - CLUSTER_NAME=master
+    env_file:
+      - ./hadoop.env
+
+  datanode:
+    image: demomagic/hadoop-datanode:hadoop-3.1.2
+    container_name: datanode
+    volumes:
+      - hadoop_datanode:/hadoop/dfs/data
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870"
+    env_file:
+      - ./hadoop.env
+  
+  resourcemanager:
+    image: demomagic/hadoop-resourcemanager:hadoop-3.1.2
+    container_name: resourcemanager
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864"
+    env_file:
+      - ./hadoop.env
+
+  nodemanager:
+    image: demomagic/hadoop-nodemanager:hadoop-3.1.2
+    container_name: nodemanager
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 resourcemanager:8088"
+    env_file:
+      - ./hadoop.env
+  
+  historyserver:
+    image: demomagic/hadoop-historyserver:hadoop-3.1.2
+    container_name: historyserver
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 resourcemanager:8088"
+    volumes:
+      - hadoop_historyserver:/hadoop/yarn/timeline
+    env_file:
+      - ./hadoop.env
+    
+  hive-server:
+    image: demomagic/hive:3.1.2-postgresql12
+    container_name: hive-server
+    env_file:
+      - ./hadoop.env
+    environment:
+      SERVICE_PRECONDITION: "hive-metastore:9083"
+    ports:
+      - "10000:10000"
+  
+  hive-metastore:
+    image: demomagic/hive:3.1.2-postgresql12
+    container_name: hive-metastore
+    env_file:
+      - ./hadoop.env
+    command: /opt/hive/bin/hive --service metastore
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 hive-metastore-postgresql:5432"
+    ports:
+      - "9083:9083"
+      
+  hive-metastore-postgresql:
+    image: demomagic/postgresql:12-hive3.1.2
+    container_name: hive-metastore-postgresql
+    
+volumes:
+  hadoop_namenode:
+  hadoop_datanode:
+  hadoop_historyserver:
