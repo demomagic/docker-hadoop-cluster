@@ -5,7 +5,7 @@ FROM ubuntu:18.04
 MAINTAINER demon 369587353@qq.com
 
 RUN cp /etc/apt/sources.list /etc/apt/sources.list.bak
-RUN sed -i s:/archive.ubuntu.com:/cn.archive.ubuntu.com:g /etc/apt/sources.list
+RUN sed -i s:/archive.ubuntu.com:/mirrors.aliyun.com:g /etc/apt/sources.list
 RUN apt-get clean
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
