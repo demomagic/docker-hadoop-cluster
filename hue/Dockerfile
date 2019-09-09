@@ -1,5 +1,5 @@
 #
-# Building hue-build-env
+# Building hue
 #
 FROM demomagic/hue-build-env:4.5.0
 MAINTAINER demon 369587353@qq.com
