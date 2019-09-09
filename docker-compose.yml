@@ -1,6 +1,9 @@
 version: "3"
 
 services:
+#
+#BUILD HADOOP
+#
   namenode:
     image: demomagic/hadoop-namenode:hadoop-3.1.2
     container_name: namenode
@@ -48,7 +51,9 @@ services:
       - hadoop_historyserver:/hadoop/yarn/timeline
     env_file:
       - ./hadoop.env
-    
+#
+#BUILD HIVE
+#
   hive-server:
     image: demomagic/hive:3.1.2-postgresql12
     container_name: hive-server
@@ -73,7 +78,38 @@ services:
   hive-metastore-postgresql:
     image: demomagic/postgresql:12-hive3.1.2
     container_name: hive-metastore-postgresql
-    
+#
+#BUILD SPARK
+#
+  spark-master:
+    image: demomagic/spark-master:2.4.3-hadoop2.7
+    container_name: spark-master
+    ports:
+      - 8080:8080
+      - 7077:7077
+    env_file:
+      - ./hadoop.env
+      
+  spark-worker-1:
+    image: demomagic/spark-worker:2.4.3-hadoop2.7
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MASTER=spark://spark-master:7077
+    ports:
+      - 8081:8081
+    env_file:
+      - ./hadoop.env
+#
+#BUILD HUE
+#
+  hue:
+    image: demomagic/hue:4.5.0
+    ports:
+      - 8088:8088
+    environment:
+      - NAMENODE_HOST=namenode
+
 volumes:
   hadoop_namenode:
   hadoop_datanode:
