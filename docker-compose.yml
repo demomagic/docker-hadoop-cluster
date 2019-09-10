@@ -54,27 +54,24 @@ services:
 #
 #BUILD HIVE
 #
+  hive-metastore:
+    image: demomagic/hive:3.1.2-postgresql12-metastore
+    container_name: hive-metastore
+    env_file:
+      - ./hive-metastore.env
+    environment:
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 hive-metastore-postgresql:5432"
+      
   hive-server:
-    image: demomagic/hive:3.1.2-postgresql12
+    image: demomagic/hive:3.1.2-postgresql12-server
     container_name: hive-server
     env_file:
-      - ./hadoop.env
+      - ./hive-server.env
     environment:
       SERVICE_PRECONDITION: "hive-metastore:9083"
     ports:
       - "10000:10000"
   
-  hive-metastore:
-    image: demomagic/hive:3.1.2-postgresql12
-    container_name: hive-metastore
-    env_file:
-      - ./hadoop.env
-    command: /opt/hive/bin/hive --service metastore
-    environment:
-      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 hive-metastore-postgresql:5432"
-    ports:
-      - "9083:9083"
-      
   hive-metastore-postgresql:
     image: demomagic/postgresql:12-hive3.1.2
     container_name: hive-metastore-postgresql
@@ -101,6 +98,17 @@ services:
       - 8081:8081
     env_file:
       - ./hadoop.env
+  
+  spark-notebook:
+    image: demomagic/spark-notebook:0.8.3-with-hive
+    container_name: spark-notebook
+    env_file:
+      - ./hadoop.env
+    ports:
+      - 9000:9000
+    depends_on:
+      - spark-master
+      - namenode
 #
 #BUILD HUE
 #
