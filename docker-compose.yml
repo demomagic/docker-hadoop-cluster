@@ -70,7 +70,7 @@ services:
     environment:
       SERVICE_PRECONDITION: "hive-metastore:9083"
     ports:
-      - "10000:10000"
+      - 10000:10000
   
   hive-metastore-postgresql:
     image: demomagic/postgresql:12-hive3.1.2
@@ -98,17 +98,6 @@ services:
       - 8081:8081
     env_file:
       - ./hadoop.env
-  
-  spark-notebook:
-    image: demomagic/spark-notebook:0.8.3-with-hive
-    container_name: spark-notebook
-    env_file:
-      - ./hadoop.env
-    ports:
-      - 9000:9000
-    depends_on:
-      - spark-master
-      - namenode
 #
 #BUILD HUE
 #
