@@ -12,14 +12,12 @@ ENV ENABLE_INIT_DAEMON true
 ENV INIT_DAEMON_BASE_URI http://identifier/init-daemon
 ENV INIT_DAEMON_STEP spark_master_init
 
-ENV SPARK_VERSION=2.4.3
+ENV SPARK_VERSION=2.3.3
 ENV HADOOP_VERSION=2.7
 
 COPY wait-for-step.sh /
 COPY execute-step.sh /
 COPY finish-step.sh /
-
-#COPY bde-spark.css /css/org/apache/spark/ui/static/timeline-view.css
 
 RUN apt-get update && apt-get install -y --no-install-recommends curl bash openjdk-8-jdk wget python3.6 python-pip libnss3 \
       && ln -s /lib64/ld-linux-x86-64.so.2 /lib/ld-linux-x86-64.so.2 \
@@ -29,8 +27,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends curl bash openj
       && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark \
       && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
 	  && rm -rf /var/lib/apt/lists/* \
-      #&& cd /css \
-      #&& jar uf /spark/jars/spark-core_2.11-${SPARK_VERSION}.jar org/apache/spark/ui/static/timeline-view.css \
       && cd /
 
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
