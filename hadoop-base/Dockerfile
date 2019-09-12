@@ -21,7 +21,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 	   less \
     && rm -rf /var/lib/apt/lists/*
       
-ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64/
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 
 ENV HADOOP_VERSION 3.1.2
 ENV HADOOP_URL http://archive.apache.org/dist/hadoop/core/hadoop-$HADOOP_VERSION/hadoop-$HADOOP_VERSION.tar.gz
