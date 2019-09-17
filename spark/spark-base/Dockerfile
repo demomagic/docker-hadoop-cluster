@@ -10,16 +10,16 @@ ENV INIT_DAEMON_STEP spark_master_init
 
 ENV SPARK_VERSION=2.3.4
 ENV LIVY_VERSION=0.6.0
+ENV HADOOP_VERSION=2.7
 
 WORKDIR /opt
 
-RUN apt-get update && apt-get install -y --no-install-recommends curl bash openjdk-8-jdk wget python3.6 python-pip libnss3 \
+RUN apt-get update && apt-get install -y --no-install-recommends curl bash wget python3.6 python-pip \
       && ln -s /lib64/ld-linux-x86-64.so.2 /lib/ld-linux-x86-64.so.2 \
-      && chmod +x *.sh \
-      && wget https://mirrors.aliyun.com/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-without-hadoop.tgz \
-      && tar -xvzf spark-${SPARK_VERSION}-bin-without-hadoop.tgz \
-      && mv spark-${SPARK_VERSION}-bin-without-hadoop spark \
-      && rm spark-${SPARK_VERSION}-bin-without-hadoop.tgz \
+      && wget https://mirrors.aliyun.com/apache/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && tar -xvzf spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
+      && mv spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION} spark \
+      && rm spark-${SPARK_VERSION}-bin-hadoop${HADOOP_VERSION}.tgz \
 	  && rm -rf /var/lib/apt/lists/* 
 ENV SPARK_HOME=/opt/spark
 ADD conf/spark-defaults.conf ${SPARK_HOME}/conf
@@ -34,6 +34,9 @@ RUN wget http://mirrors.tuna.tsinghua.edu.cn/apache/incubator/livy/0.6.0-incubat
 	&& mv apache-livy-${LIVY_VERSION}-incubating-bin livy \
 	&& rm apache-livy-${LIVY_VERSION}-incubating-bin.zip
 ENV LIVY_HOME=/opt/livy
+RUN mkdir $LIVY_HOME/logs
+
+EXPOSE 8998
 
 # Fix the value of PYTHONHASHSEED
 # Note: this is needed when you use Python 3.3 or greater
