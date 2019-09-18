@@ -1,7 +1,7 @@
 #
 # Building spark-master
 #
-FROM demomagic/spark-base:2.4.3-hadoop2.7
+FROM demomagic/spark-base
 
 MAINTAINER demon 369587353@qq.com
 
