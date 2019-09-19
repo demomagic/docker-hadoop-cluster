@@ -2,11 +2,15 @@
 set -e
 
 psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" <<-EOSQL
+  CREATE USER hue WITH PASSWORD 'hue';
+  CREATE DATABASE hue_metastore;
+  GRANT ALL PRIVILEGES ON DATABASE hue_metastore TO hue;
+  
   CREATE USER hive WITH PASSWORD 'hive';
-  CREATE DATABASE metastore;
-  GRANT ALL PRIVILEGES ON DATABASE metastore TO hive;
+  CREATE DATABASE hive_metastore;
+  GRANT ALL PRIVILEGES ON DATABASE hive_metastore TO hive;
 
-  \c metastore
+  \c hive_metastore
 
   \i /hive/hive-schema-3.1.2.postgres12.sql
 

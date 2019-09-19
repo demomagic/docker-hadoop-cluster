@@ -18,7 +18,7 @@ ENV PATH $LIVY_HOME/bin:$PATH
 
 RUN mkdir $LIVY_HOME/logs
 
-ADD conf/livy.conf ${LIVY_HOME}/conf
+ADD livy.conf ${LIVY_HOME}/conf
 
 EXPOSE 8998
 

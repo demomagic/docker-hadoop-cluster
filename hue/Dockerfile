@@ -7,6 +7,7 @@ MAINTAINER demon 369587353@qq.com
 WORKDIR /opt/hue
 
 ADD entrypoint.sh /entrypoint.sh
+ADD hue.ini /opt/hue/desktop/conf
 RUN chmod a+x /entrypoint.sh
 
 EXPOSE 8088

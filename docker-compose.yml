@@ -60,7 +60,7 @@ services:
     env_file:
       - ./hive-metastore.env
     environment:
-      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 hive-metastore-postgresql:5432"
+      SERVICE_PRECONDITION: "namenode:9870 datanode:9864 metastore-postgresql:5432"
       
 #  hive-server:
 #    image: demomagic/hive:3.1.1-postgresql12-server
@@ -73,9 +73,6 @@ services:
 #      - 10000:10000
 #      - 10002:10002
   
-  hive-metastore-postgresql:
-    image: demomagic/postgresql:12-hive3.1.2
-    container_name: hive-metastore-postgresql
 #
 #BUILD SPARK
 #
@@ -103,6 +100,8 @@ services:
       - spark-master
     environment:
       - SPARK_MASTER=spark://spark-master:7077
+    ports:
+      - 8998:8998
       
 #
 #BUILD HUE
@@ -114,6 +113,10 @@ services:
       - 8088:8088
     environment:
       - NAMENODE_HOST=namenode
+
+  metastore-postgresql:
+    image: demomagic/metastore-postgresql:12
+    container_name: metastore-postgresql
 
 volumes:
   hadoop_namenode:
