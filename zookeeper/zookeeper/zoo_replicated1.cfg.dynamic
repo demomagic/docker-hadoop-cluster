@@ -1,0 +1,3 @@
+server.1=bde-one.example.com:31200:31201:participant;31202
+server.2=bde-two.example.com:31200:31201:participant;31202
+server.3=bde-three.example.com:31200:31201:participant;31202
